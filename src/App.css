@@ -1,38 +1,760 @@
-.App {
-  text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply min-h-screen;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 30%);
 }
 
-.App-logo {
-  height: 40vmin;
+/* Ajout d'un effet de particules flottantes */
+.background-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateY(50vh) scale(1) rotate(180deg);
+  }
+  100% {
+    transform: translateY(-100vh) scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Styles personnalisés pour les inputs et selects */
+input[type="text"],
+input[type="date"],
+textarea,
+select {
+  @apply border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white/80 backdrop-blur-sm;
+}
+
+/* Animation pour les transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Styles pour les cartes */
+.card {
+  @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-lg;
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Styles pour les boutons */
+.btn-primary {
+  @apply bg-indigo-600 text-white py-2 px-4 rounded-lg;
+  animation: pulse 2s infinite;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+.btn-danger {
+  @apply bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 
+         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
+         transition-all duration-200 transform hover:scale-105;
+}
+
+/* Styles pour les badges */
+.badge {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-2deg);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+/* Animation pour les éléments de la liste */
+.task-enter {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  filter: blur(5px);
+}
+
+.task-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.task-exit-active {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.95);
+  filter: blur(5px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation pour le compteur de caractères */
+.counter {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.counter.warning {
+  @apply text-yellow-500;
+  animation: pulse 1s infinite;
+}
+
+.counter.danger {
+  @apply text-red-500;
+  animation: pulse 0.5s infinite;
+}
+
+/* Animation pour les filtres */
+.filter-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Animation pour le titre */
+.title-animation {
+  animation: titleSlide 0.5s ease-out;
+}
+
+@keyframes titleSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.9);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-item {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: red;
+}
+
+.delete-button:hover {
+  color: darkred;
+}
+
+.add-button {
+  margin-top: 10px;
+  padding: 10px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background: #45a049;
+}
+
+/* Styles améliorés pour les listes déroulantes */
+select {
+  @apply appearance-none bg-white/90 backdrop-blur-sm border border-gray-300 rounded-lg px-4 py-2.5 pr-10 cursor-pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234B5563'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25em 1.25em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+select:hover {
+  @apply border-indigo-400;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+select:focus {
+  @apply outline-none border-indigo-500 ring-2 ring-indigo-200;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2), 0 2px 4px -1px rgba(99, 102, 241, 0.1);
+}
+
+select option {
+  @apply py-2.5 px-4 bg-white;
+  animation: fadeIn 0.2s ease-out;
+}
+
+select option:hover {
+  @apply bg-indigo-50;
+}
+
+/* Style pour le conteneur du select */
+.select-container {
+  @apply relative;
+}
+
+.select-container::after {
+  content: '';
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25em;
+  height: 1.25em;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.select-container:hover::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Style pour les options groupées */
+optgroup {
+  @apply bg-gray-50 font-semibold text-gray-700;
+}
+
+/* Style pour les options désactivées */
+select option:disabled {
+  @apply text-gray-400 bg-gray-50 cursor-not-allowed;
+}
+
+/* Animation pour l'ouverture de la liste déroulante */
+@keyframes selectOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+select:focus option {
+  animation: selectOpen 0.2s ease-out;
+}
+
+/* Style pour les options sélectionnées */
+select option:checked {
+  @apply bg-indigo-50 text-indigo-900 font-medium;
+}
+
+/* Style pour le placeholder */
+select option[value=""] {
+  @apply text-gray-500;
+}
+
+/* Styles des cartes avec animations améliorées */
+.card {
+  @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-lg;
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Boutons avec animations améliorées */
+.btn-primary {
+  @apply bg-indigo-600 text-white py-2 px-4 rounded-lg;
+  animation: pulse 2s infinite;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+}
+
+/* Badges avec animations améliorées */
+.badge {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+}
+
+.badge:hover {
+  transform: scale(1.1);
+}
+
+/* Styles améliorés pour les sous-tâches */
+.subtask-list {
+  @apply ml-6 mt-4 space-y-2;
+  border-left: 2px solid #e5e7eb;
+  padding-left: 1rem;
+}
+
+.subtask-item {
+  @apply flex items-center space-x-3 p-3 rounded-lg bg-gray-50;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e5e7eb;
+}
+
+.subtask-item:hover {
+  @apply bg-gray-100;
+  transform: translateX(5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.subtask-item.completed {
+  @apply bg-green-50 border-green-100;
+}
+
+.subtask-item.completed span {
+  @apply text-gray-500 line-through;
+}
+
+.subtask-progress {
+  @apply w-full h-2 bg-gray-200 rounded-full overflow-hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.subtask-progress-bar {
+  @apply h-full bg-green-500;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.subtask-checkbox {
+  @apply w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500;
+  transition: all 0.2s ease;
+}
+
+.subtask-checkbox:checked {
+  @apply bg-indigo-600 border-indigo-600;
+  animation: checkmark 0.3s ease-in-out;
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.subtask-delete-btn {
+  @apply text-gray-400 hover:text-red-500 transition-colors duration-200;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+}
+
+.subtask-item:hover .subtask-delete-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.subtask-form {
+  @apply flex gap-2 mt-4;
+}
+
+.subtask-input {
+  @apply flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500;
+  transition: all 0.2s ease;
+}
+
+.subtask-input:focus {
+  @apply border-indigo-500 ring-1 ring-indigo-500;
+}
+
+.subtask-add-btn {
+  @apply bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 
+         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 
+         transition-all duration-200 transform hover:scale-105;
+}
+
+.subtask-header {
+  @apply flex items-center justify-between mb-3;
+  padding-left: 0.5rem;
+}
+
+.subtask-count {
+  @apply text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full;
+}
+
+/* Effet de brillance pour les éléments importants */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Animations pour les vues Kanban et Calendrier */
+.kanban-task {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kanban-task:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-day {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendar-day:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation de suppression */
+@keyframes deleteTask {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8) rotate(10deg);
+    filter: blur(5px);
+  }
+}
+
+.task-delete {
+  animation: deleteTask 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Animation pour le bouton de suppression */
+.delete-button {
+  @apply bg-transparent text-red-500 hover:text-red-700 dark:hover:text-red-400;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.delete-button:hover {
+  transform: scale(1.2) rotate(90deg);
+}
+
+/* Styles pour le titre principal */
+.main-title {
+  @apply text-4xl font-bold text-gray-800 mb-2;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  animation: titleSlide 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.subtitle {
+  @apply text-lg text-gray-600 mb-8;
+  animation: subtitleFade 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+}
+
+@keyframes subtitleFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation pour les nouvelles tâches principales */
+@keyframes taskCreate {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) scale(0.5) rotate(-10deg);
+    filter: blur(10px);
+  }
+  30% {
+    transform: translateY(-20px) scale(1.2) rotate(5deg);
+    filter: blur(5px);
+  }
+  60% {
+    transform: translateY(10px) scale(0.9) rotate(-2deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+    filter: blur(0);
+  }
+}
+
+.task-card {
+  animation: taskCreate 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center;
+}
+
+.task-card:hover {
+  transform: translateY(-8px) scale(1.02) rotate(1deg);
+  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* Effet de brillance pour les nouvelles tâches */
+.task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shine 1.5s ease-in-out;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  20% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Animation pour les sous-tâches */
+@keyframes subtaskAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.9) rotate(-1deg);
+    filter: blur(5px);
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translateX(5px) scale(1.05) rotate(0.5deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotate(0);
+    filter: blur(0);
   }
 }
+
+.subtask-item {
+  animation: subtaskAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.subtask-item:hover {
+  transform: translateX(8px) scale(1.02);
+  background-color: rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation pour les badges */
+@keyframes badgeAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-10deg);
+    filter: blur(3px);
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+    filter: blur(0);
+  }
+}
+
+.badge {
+  animation: badgeAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.badge:hover {
+  transform: scale(1.15) rotate(2deg);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation pour le formulaire */
+@keyframes inputFocus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.form-input:focus {
+  animation: inputFocus 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Animation pour le bouton d'ajout */
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.btn-primary {
+  animation: buttonPulse 2s infinite;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 15px 20px -5px rgba(99, 102, 241, 0.4);
+}
+
+/* Animation pour la suppression */
+@keyframes deleteTask {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8) rotate(15deg);
+    filter: blur(8px);
+  }
+}
+
+.task-delete {
+  animation: deleteTask 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
